@@ -28,6 +28,7 @@ A existência da conta de destino deve ser validada, assim como a existência de
 - Fazer o deploy da aplicação no seu ambiente de nuvem preferido ([IBM Cloud](https://cloud.ibm.com/), AWS, Azure, GCP).
 - Sinta-se livre a utilizar outros frameworks aceleradores.
 - Nice to Have: Apresentar o projeto rodando em docker.
+- Nice to Have++: Apresentar o Open Api Specification da API criada.
 - Realize commits (git) constantes de acordo com a progressão das atividades.
 
 ## Back ou Front?
