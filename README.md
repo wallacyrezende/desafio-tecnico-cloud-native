@@ -32,6 +32,7 @@ A existência da conta de destino deve ser validada, assim como a existência de
 
 ## Back ou Front?
 Caso sua candidatura seja para uma vaga backend, envie apenas o código backend. O mesmo para frontend.
+
 Para candidaturas Fullstack, envie o código para as duas aplicações.
 
 ## Como enviar o código para análise?
