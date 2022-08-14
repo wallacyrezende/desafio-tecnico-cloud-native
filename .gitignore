@@ -34,3 +34,10 @@ coverage
 
 # nyc test coverage
 .nyc_output
+
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
