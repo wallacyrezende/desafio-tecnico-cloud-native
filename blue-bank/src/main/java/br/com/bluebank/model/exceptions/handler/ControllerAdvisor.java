@@ -1,5 +1,6 @@
 package br.com.bluebank.model.exceptions.handler;
 
+import br.com.bluebank.model.exceptions.BusinessRuleException;
 import br.com.bluebank.model.exceptions.NullOrEmptyObjectException;
 import br.com.bluebank.model.exceptions.utils.ExceptionHandlerResponseUtils;
 import br.com.bluebank.model.exceptions.utils.ExceptionResponse;
@@ -18,6 +19,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     private final Logger logger = LoggerFactory.getLogger(ControllerAdvisor.class);
+
+    @ExceptionHandler(BusinessRuleException.class)
+    public final ResponseEntity<?> handleBusinessRuleException(BusinessRuleException ex, WebRequest request){
+        ex.printStackTrace();
+        ExceptionResponse exceptionResponse = ExceptionHandlerResponseUtils.buildExceptionResponse(ex, request);
+        exceptionResponse.setCode(ex.getCode());
+        logger.error(exceptionResponse.toString());
+        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(NullOrEmptyObjectException.class)
     public final ResponseEntity<?> handleObjectNullException(NullOrEmptyObjectException ex, WebRequest request) {

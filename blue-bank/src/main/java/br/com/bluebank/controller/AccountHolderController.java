@@ -2,6 +2,7 @@ package br.com.bluebank.controller;
 
 import br.com.bluebank.model.dto.accountholder.CreateAccountHolderDTO;
 import br.com.bluebank.model.dto.accountholder.ResponseAccountHolderDTO;
+import br.com.bluebank.model.exceptions.AccountHolderAlreadyExistsException;
 import br.com.bluebank.service.accountHolder.AccountHolderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class AccountHolderController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@Valid @RequestBody CreateAccountHolderDTO dto) {
+    public void create(@Valid @RequestBody CreateAccountHolderDTO dto) throws AccountHolderAlreadyExistsException {
         accountHolderService.createAccountHolder(dto);
     }
 

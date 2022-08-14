@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class CreateAccountHolderDTO {
 
     @NotBlank
+    @Size(max = 14)
     private String CPF;
     @NotNull
     private Long account;
