@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface AccountHolderRepository extends JpaRepository<AccountHolder, Long>{
 
-    Optional<AccountHolder> findByCPF(String cpf);
+    Optional<AccountHolder> findByCpf(String cpf);
 }

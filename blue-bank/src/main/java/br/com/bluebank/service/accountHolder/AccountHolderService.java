@@ -1,15 +1,16 @@
 package br.com.bluebank.service.accountHolder;
 
+import br.com.bluebank.model.dto.accountholder.AccountHolderDTO;
 import br.com.bluebank.model.dto.accountholder.CreateAccountHolderDTO;
-import br.com.bluebank.model.dto.accountholder.ResponseAccountHolderDTO;
-import br.com.bluebank.model.entities.AccountHolder;
+import br.com.bluebank.model.dto.bankTransfer.TransactionDTO;
+import br.com.bluebank.model.enums.TransactionType;
 import br.com.bluebank.model.exceptions.AccountHolderAlreadyExistsException;
+import br.com.bluebank.model.exceptions.AccountHolderNotFoundException;
 
 public interface AccountHolderService {
 
-    void createAccountHolder(CreateAccountHolderDTO dto) throws AccountHolderAlreadyExistsException;
-
-    AccountHolder findAccountHolder(Integer id);
-
-    ResponseAccountHolderDTO updateAccountHolder(CreateAccountHolderDTO dto, Integer id);
+    void saveAccountHolder(CreateAccountHolderDTO dto) throws AccountHolderAlreadyExistsException;
+    AccountHolderDTO findAccountHolder(Long accountHolderId) throws AccountHolderNotFoundException;
+    AccountHolderDTO updateAccountHolder(AccountHolderDTO dto, Long accountHolderId);
+    TransactionDTO bankTransaction(Long accountHolderId, Double amount, TransactionType type) throws AccountHolderNotFoundException;
 }

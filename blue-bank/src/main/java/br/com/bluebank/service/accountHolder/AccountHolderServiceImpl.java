@@ -1,14 +1,19 @@
 package br.com.bluebank.service.accountHolder;
 
 import br.com.bluebank.mapper.AccountHolderMapper;
+import br.com.bluebank.mapper.TransactionMapper;
+import br.com.bluebank.model.dto.accountholder.AccountHolderDTO;
 import br.com.bluebank.model.dto.accountholder.CreateAccountHolderDTO;
-import br.com.bluebank.model.dto.accountholder.ResponseAccountHolderDTO;
+import br.com.bluebank.model.dto.bankTransfer.TransactionDTO;
 import br.com.bluebank.model.entities.AccountHolder;
 import br.com.bluebank.model.enums.ErrorCode;
+import br.com.bluebank.model.enums.TransactionType;
 import br.com.bluebank.model.exceptions.AccountHolderAlreadyExistsException;
-import br.com.bluebank.model.exceptions.BusinessRuleException;
+import br.com.bluebank.model.exceptions.AccountHolderNotFoundException;
 import br.com.bluebank.repository.accountholder.AccountHolderRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AccountHolderServiceImpl implements AccountHolderService {
@@ -20,29 +25,54 @@ public class AccountHolderServiceImpl implements AccountHolderService {
     }
 
     @Override
-    public void createAccountHolder(CreateAccountHolderDTO dto) throws AccountHolderAlreadyExistsException {
+    public void saveAccountHolder(CreateAccountHolderDTO dto) throws AccountHolderAlreadyExistsException {
         validate(dto);
-        AccountHolder accountHolder = AccountHolderMapper.buildAddress(dto);
+        AccountHolder accountHolder = AccountHolderMapper.buildAccountHolder(dto);
         accountHolderRepository.save(accountHolder);
     }
 
     @Override
-    public AccountHolder findAccountHolder(Integer id) {
-       // TODO findAccountHolder method
-        return null;
+    public AccountHolderDTO findAccountHolder(Long id) throws AccountHolderNotFoundException {
+        Optional<AccountHolder> accountHolder = accountHolderRepository.findById(id);
+        if(accountHolder.isEmpty()) {
+            throw new AccountHolderNotFoundException("Account holder not found!", ErrorCode.ACCOUNT_HOLDER_NOT_FOUND);
+        }
+       return AccountHolderMapper.buildAccountHolderDTO(accountHolder.get());
     }
 
     @Override
-    public ResponseAccountHolderDTO updateAccountHolder(CreateAccountHolderDTO dto, Integer id) {
-        //TODO updateAccountHolder method
-        return null;
+    public AccountHolderDTO updateAccountHolder(AccountHolderDTO dto, Long accountHolderId) {
+        AccountHolder entity = accountHolderRepository.save(AccountHolderMapper.buildAccountHolder(dto, accountHolderId));
+        return AccountHolderMapper.buildAccountHolderDTO(entity);
     }
 
-    private void validate(CreateAccountHolderDTO dto) throws AccountHolderAlreadyExistsException, BusinessRuleException {
-        validateExistAccountHolder(dto);
+    @Override
+    public TransactionDTO bankTransaction(Long accountHolderId, Double amount, TransactionType type) throws AccountHolderNotFoundException {
+        AccountHolderDTO accountHolderDTO = findAccountHolder(accountHolderId);
+        AccountHolder accountHolderToSave = AccountHolderMapper.buildAccountHolder(accountHolderDTO, accountHolderId);
+        updateBalance(accountHolderToSave, type, amount);
+        AccountHolder accountHolderEntity = accountHolderRepository.save(accountHolderToSave);
+        return TransactionMapper.buildTransactionDTO(accountHolderEntity, type, amount);
     }
-    private void validateExistAccountHolder(CreateAccountHolderDTO dto) throws AccountHolderAlreadyExistsException {
-        if(accountHolderRepository.findByCPF(dto.getCPF()).isPresent())
+
+    private void validate(CreateAccountHolderDTO dto) throws AccountHolderAlreadyExistsException {
+        validateExistAccountHolder(dto.getCpf());
+    }
+    private void validateExistAccountHolder(String cpf) throws AccountHolderAlreadyExistsException {
+        if(accountHolderRepository.findByCpf(cpf).isPresent())
             throw new AccountHolderAlreadyExistsException(ErrorCode.ACCOUNT_HOLDER_ALREADY_EXISTS_EXCEPTION);
+    }
+
+    private void updateBalance(AccountHolder accountHolder, TransactionType type, Double amount) {
+
+        switch (type) {
+            case CREDIT:
+                accountHolder.creditAmout(amount);
+                break;
+            case DEBIT:
+                accountHolder.debitAmout(amount);
+                break;
+        }
+
     }
 }
