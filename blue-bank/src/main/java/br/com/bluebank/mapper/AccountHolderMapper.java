@@ -1,14 +1,16 @@
 package br.com.bluebank.mapper;
 
 import br.com.bluebank.model.dto.accountholder.CreateAccountHolderDTO;
+import br.com.bluebank.model.dto.accountholder.AccountHolderDTO;
 import br.com.bluebank.model.entities.AccountHolder;
 import br.com.bluebank.model.exceptions.NullOrEmptyObjectException;
+import br.com.bluebank.model.exceptions.utils.NullOrEmptyFieldException;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountHolderMapper extends Mapper {
 
-    public static AccountHolder buildAddress(CreateAccountHolderDTO dto) {
+    public static AccountHolder buildAccountHolder(CreateAccountHolderDTO dto) {
         if(isNull(dto)) {
             throw new NullOrEmptyObjectException(CreateAccountHolderDTO.class.getSimpleName());
         }
@@ -16,19 +18,39 @@ public class AccountHolderMapper extends Mapper {
         return AccountHolder.builder()
                 .branch(dto.getBranch())
                 .account(dto.getAccount())
-                .CPF(dto.getCPF())
+                .cpf(dto.getCpf())
+                .balance(dto.getBalance())
                 .build();
     }
 
-    public static CreateAccountHolderDTO buildAddress(AccountHolder accountHolder) {
-        if(isNull(accountHolder)) {
-            throw new NullOrEmptyObjectException(CreateAccountHolderDTO.class.getSimpleName());
+    public static AccountHolder buildAccountHolder(AccountHolderDTO dto, Long accountHolderId) {
+        if(isNull(dto)) {
+            throw new NullOrEmptyObjectException(AccountHolderDTO.class.getSimpleName());
         }
 
-        return CreateAccountHolderDTO.builder()
+        if(isNull(accountHolderId)) {
+            throw new NullOrEmptyFieldException("accountHolderId");
+        }
+
+        return AccountHolder.builder()
+                .id(accountHolderId)
+                .branch(dto.getBranch())
+                .account(dto.getAccount())
+                .cpf(dto.getCpf())
+                .balance(dto.getBalance())
+                .build();
+    }
+
+    public static AccountHolderDTO buildAccountHolderDTO(AccountHolder accountHolder) {
+        if(isNull(accountHolder)) {
+            throw new NullOrEmptyObjectException(AccountHolder.class.getSimpleName());
+        }
+
+        return AccountHolderDTO.builder()
                 .branch(accountHolder.getBranch())
                 .account(accountHolder.getAccount())
-                .CPF(accountHolder.getCPF())
+                .cpf(accountHolder.getCpf())
+                .balance(accountHolder.getBalance())
                 .build();
     }
 

@@ -1,24 +1,16 @@
 package br.com.bluebank.model.dto.accountholder;
 
-import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
+@Builder
 @Getter
 @Setter
-@Builder
-public class CreateAccountHolderDTO {
+public class AccountHolderDTO {
 
-    @NotBlank
-    @Size(max = 14)
     private String cpf;
-    @NotNull
     private Long account;
-    @NotNull
     private String branch;
     private Double balance;
 }
