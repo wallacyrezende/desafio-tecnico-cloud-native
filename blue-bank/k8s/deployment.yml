@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-blue-bank-deployment
+  labels:
+    app: api-blue-bank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-blue-bank
+  template:
+    metadata:
+      labels:
+        app: api-blue-bank
+    spec:
+      containers:
+        - name: api-blue-bank
+          image: wallacyrezende/api-blue-bank:1.0-dev
+          ports:
+            - containerPort: 8080
+          env:
+            - name: spring.profiles.active
+              value: dev
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-blue-bank
+spec:
+  selector:
+    app: api-blue-bank
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 80
+
