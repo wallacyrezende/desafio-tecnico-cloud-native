@@ -11,6 +11,7 @@ import lombok.ToString;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class AccountHolder implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String CPF;
+    private String cpf;
 
     @Column(nullable = false)
     private Long account;
@@ -46,6 +47,17 @@ public class AccountHolder implements Serializable {
     @Column(nullable = false)
     private String branch;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @Column
+    private Double balance;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions = new ArrayList<>();
+
+    public void debitAmout(Double amount) {
+        this.balance -= amount;
+    }
+
+    public void creditAmout(Double amount) {
+        this.balance += amount;
+    }
 }
