@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export IMAGE_NAME=wallacyrezende/api-bluebank:1.0-dev
+export IMAGE_NAME=wallacyrezende/api-blue-bank:1.0-dev
 
 mvnw clean package -DskipTests
 docker image rm $IMAGE_NAME
