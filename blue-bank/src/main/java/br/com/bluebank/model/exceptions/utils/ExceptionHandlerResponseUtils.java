@@ -12,4 +12,11 @@ public class ExceptionHandlerResponseUtils {
                 .details(request.getDescription(false))
                 .build();
     }
+
+    public static ExceptionResponse buildGenericExceptionResponse(WebRequest request){
+        return ExceptionResponse.builder().dateTime(LocalDateTime.now())
+                .message("There was an error trying to process the request")
+                .details(request.getDescription(false))
+                .build();
+    }
 }
