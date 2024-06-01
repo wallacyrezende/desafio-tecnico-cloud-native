@@ -1,0 +1,14 @@
+[build]
+# Especifica o diretório onde o Dockerfile está localizado
+dockerfile = "./Dockerfile"
+
+# Definição do serviço
+[service]
+# Nome do serviço
+name = "blue-bank-service"
+
+# Comando para construir a imagem
+build_cmd = "docker build -t blue-bank-service ."
+
+# Comando para rodar a aplicação
+run_cmd = "docker run -p 8080:8080 blue-bank-service"
