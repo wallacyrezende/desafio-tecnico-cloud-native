@@ -16,6 +16,8 @@ WORKDIR /app
 COPY --from=build /app/target/blue-bank-0.0.1-SNAPSHOT.jar /app/api-blue-bank.jar
 
 ENV SPRING_PROFILES_ACTIVE=dev
+ARG PORT
+ENV PORT=${PORT}
 
 # Definir o ponto de entrada para a aplicação
 ENTRYPOINT ["java", "-jar", "api-blue-bank.jar", "-Dspring.profiles.active=dev"]
